@@ -33,11 +33,11 @@ export default function recipeReducer(state = initialState, action) {
           id: item.id,
           title: item.title,
           body: item.body,
-          category: item.category,
-          image: item.image,
-          author: item.author,
-          ingredients: item.ingredients,
-          method: item.method,
+          category: '',
+          image: 'https://placeimg.com/640/480/any?' + item.id,
+          author: item.user.login,
+          ingredients: [],
+          method: [],
         }));
       }
 

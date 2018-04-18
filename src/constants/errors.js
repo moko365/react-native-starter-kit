@@ -11,7 +11,7 @@ export default {
   memberExists: 'Member already exists',
   missingFirstName: 'First name is missing',
   missingLastName: 'Last name is missing',
-  missingEmail: 'Email is missing',
+  missingEmail: '請輸入 Email',
   missingPassword: 'Password is missing',
   passwordsDontMatch: 'Passwords do not match',
 

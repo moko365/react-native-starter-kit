@@ -1,4 +1,5 @@
 import { Firebase, FirebaseRef } from '../lib/firebase';
+import axios from 'axios'; // Version can be specified in package.json
 
 /**
   * Get this User's Favourite Recipes
@@ -13,7 +14,7 @@ export function getFavourites(dispatch) {
 
   return ref.on('value', (snapshot) => {
     const favs = snapshot.val() || [];
-
+    console.log(favs);
     return dispatch({
       type: 'FAVOURITES_REPLACE',
       data: favs,
@@ -74,12 +75,23 @@ export function setError(message) {
 /**
   * Get Recipes
   */
-export function getRecipes() {
+export function _getRecipes() {
   if (Firebase === null) return () => new Promise(resolve => resolve());
 
   return dispatch => new Promise(resolve => FirebaseRef.child('recipes')
     .on('value', (snapshot) => {
-      const recipes = snapshot.val() || {};
+      //const recipes = snapshot.val() || {};
+
+      let recipes = [{
+          id: 0,
+          title: 'abc',
+          body: '',
+          category: '',
+          image: 'https://placeimg.com/640/480/any',
+          author: 'jollen',
+          ingredients: '',
+          method: '',
+        }];
 
       return resolve(dispatch({
         type: 'RECIPES_REPLACE',
@@ -87,3 +99,28 @@ export function getRecipes() {
       }));
     })).catch(e => console.log(e));
 }
+
+export function getRecipes() {
+  const api = 'https://api.github.com/repos/jollen/blog/issues?access_token=<YOUR-TOKEN>';
+
+  return dispatch => new Promise(resolve => {
+    axios.get(api).then(response => {
+      return resolve(dispatch({
+        type: 'RECIPES_REPLACE',
+        data: response.data,
+      }));
+    });
+  }).catch(e => console.log(e));
+
+}
+
+
+
+
+
+
+
+
+
+
+

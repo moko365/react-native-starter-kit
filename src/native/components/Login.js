@@ -56,8 +56,8 @@ class Login extends React.Component {
       <Container>
         <Content padder>
           <Header
-            title="Welcome back"
-            content="Please use your email and password to login."
+            title="歡迎"
+            content="請輸入 Email 與密碼."
           />
 
           {error && <Messages message={error} />}
