@@ -1,26 +1,47 @@
 import React from 'react';
 import { Container, Content, Text, H1, H2, H3, Button } from 'native-base';
 import Spacer from './Spacer';
+import { LineChart, Grid } from 'react-native-svg-charts'
+import { WebsocketStore, WebsocketActions } from 'react-websocket-flux';
 
-const About = () => (
-  <Container>
-    <Content padder>
-      <Spacer size={30} />
-      <H1>Heading 1</H1>
-      <Spacer size={10} />
-      <Text>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </Text>
+class About extends React.Component {
+    constructor(props, context) {
+        super(props, context);
 
-      <Spacer size={30} />
-      <H2>Heading 2</H2>
-      <Spacer size={10} />
-      <Text>Elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </Text>
+        this.state = {
+          data: []
+        }
 
-      <Spacer size={30} />
-      <H3>Heading 3</H3>
-      <Spacer size={10} />
-      <Text>Elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </Text>
-    </Content>
-  </Container>
-);
+        this.onMessage = this.onMessage.bind(this);
+        WebsocketActions.connect('ws://wot.city/object/testman/viewer');
+    }
+
+    componentDidMount() {
+        WebsocketStore.addMessageListener(this.onMessage);
+    }
+
+    componentWillUnmount() {
+        WebsocketStore.removeMessageListener(this.onMessage);      
+    }
+
+    onMessage(data) {
+        this.state.data.push(data.temperature);
+        this.setState( this.state.data );
+    }
+
+    render() { 
+        return (
+            <LineChart
+                style={{ height: 300 }}
+                data={ this.state.data }
+                svg={{ stroke: 'rgb(134, 65, 244)' }}
+                contentInset={{ top: 100, bottom: 0 }}
+            >
+                <Grid/>
+            </LineChart>
+        )
+    }
+ 
+}
 
 export default About;

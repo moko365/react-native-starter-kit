@@ -101,7 +101,7 @@ export function _getRecipes() {
 }
 
 export function getRecipes() {
-  const api = 'https://api.github.com/repos/jollen/blog/issues?access_token=<YOUR-TOKEN>';
+  const api = 'https://api.github.com/repos/jollen/blog/issues?access_token=60bce5716d1aa37fd95dcc615d53200bb5770983';
 
   return dispatch => new Promise(resolve => {
     axios.get(api).then(response => {

@@ -25,6 +25,8 @@ import MemberContainer from '../../containers/Member';
 import ProfileComponent from '../components/Profile';
 
 import AboutComponent from '../components/About';
+import TableComponent from '../components/Table';
+import CameraComponent from '../components/Camera';
 
 const Index = (
   <Stack>
@@ -39,10 +41,28 @@ const Index = (
         <Stack
           key="home"
           title={AppConfig.appName.toUpperCase()}
-          icon={() => <Icon name="planet" {...DefaultProps.icons} />}
+          icon={() => <Icon type="FontAwesome" name="line-chart" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}
         >
           <Scene key="home" component={AboutComponent} />
+        </Stack>
+
+        <Stack
+          key="reports"
+          title={AppConfig.appName.toUpperCase()}
+          icon={() => <Icon type="FontAwesome" name="table" {...DefaultProps.icons} />}
+          {...DefaultProps.navbarProps}
+        >
+          <Scene key="reports" component={TableComponent} />
+        </Stack>
+
+        <Stack
+          key="camera"
+          title={AppConfig.appName.toUpperCase()}
+          icon={() => <Icon type="FontAwesome" name="camera" {...DefaultProps.icons} />}
+          {...DefaultProps.navbarProps}
+        >
+          <Scene key="reports" component={CameraComponent} />
         </Stack>
 
         <Stack
