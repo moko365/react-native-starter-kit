@@ -24,6 +24,9 @@ import ForgotPasswordComponent from '../components/ForgotPassword';
 import UpdateProfileContainer from '../../containers/UpdateProfile';
 import UpdateProfileComponent from '../components/UpdateProfile';
 
+import TempContainer from '../../containers/Temp';
+import TempComponent from '../components/Temp';
+
 import Error from '../components/Error';
 
 const Index = () => (
@@ -69,6 +72,14 @@ const Index = () => (
         </TemplateSidebar>
       )}
     />
+    <Route
+      path="/temp"
+      render={props => (
+        <TemplateSidebar>
+          <TempContainer {...props} Layout={TempComponent} temp="-1" />
+        </TemplateSidebar>
+      )}
+    />    
     <Route
       path="/recipes"
       render={props => (

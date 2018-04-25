@@ -26,6 +26,8 @@ import ProfileComponent from '../components/Profile';
 
 import AboutComponent from '../components/About';
 import TableComponent from '../components/Table';
+
+import CameraContainer from '../../containers/Camera';
 import CameraComponent from '../components/Camera';
 
 const Index = (
@@ -62,7 +64,7 @@ const Index = (
           icon={() => <Icon type="FontAwesome" name="camera" {...DefaultProps.icons} />}
           {...DefaultProps.navbarProps}
         >
-          <Scene key="reports" component={CameraComponent} />
+          <Scene key="camera" component={CameraContainer} Layout={CameraComponent} />
         </Stack>
 
         <Stack
