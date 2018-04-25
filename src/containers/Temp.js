@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-//import { getTemp } from '../actions/temp';
+import { getTemp } from '../actions/temp';
 
 class Temp extends React.Component {
   componentDidMount() {
@@ -22,7 +22,6 @@ class Temp extends React.Component {
 Temp.propTypes = {
     getTemp: PropTypes.func.isRequired,
     temp: PropTypes.number.isRequired
-
 };
 
 /* 
@@ -83,35 +82,8 @@ const mapStateToProps = function(state) {
   return newProps;
 };
 
-const mapDispatchToProps = function(dispatch) {
-    return {
-        getTemp: function(data) {
-
-            var W3CWebSocket = require('websocket').w3cwebsocket;
-            var client = new W3CWebSocket('ws://wot.city/object/testman/viewer', '');
-
-            client.onerror = function() {
-                console.log('Connection Error');
-            };
-             
-            client.onopen = function() {
-                console.log('WebSocket Client Connected');
-            };
-             
-            client.onclose = function() {
-                console.log('echo-protocol Client Closed');
-            };
-             
-            client.onmessage = function(e) {
-                if (typeof e.data === 'string') {
-                    dispatch({
-                          type: 'MESSAGE_TEMP',
-                          data: JSON.parse(e.data).temp
-                    });
-                }
-            };
-        }
-    }
+const mapDispatchToProps = {
+    getTemp
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Temp);
