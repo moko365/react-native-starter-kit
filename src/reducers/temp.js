@@ -8,7 +8,7 @@ export default function tempReducer(state = initialState, action) {
   switch (action.type) {
     case 'MESSAGE_TEMP': {
       console.log('action.data =', action.data);
-      
+
       var newState = {
         ...state,
         temp: action.data
