@@ -7,8 +7,8 @@ import { takePictureReady, getCameraParameter } from '../actions/camera';
 
 class CameraContainer extends Component {
 
-  componentDidMount() => this.props.getCameraParameter();
-  
+  componentDidMount = () => this.props.getCameraParameter();
+
   render = () => {
     const { Layout, autofocus } = this.props;
 
@@ -18,7 +18,7 @@ class CameraContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  autofocus: state.autofocus ,
+  autoFocus: state.autofocus ,
 });
 
 const mapDispatchToProps = {
