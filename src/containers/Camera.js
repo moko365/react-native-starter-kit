@@ -6,6 +6,9 @@ import { Camera } from 'expo';
 import { takePictureReady, getCameraParameter } from '../actions/camera';
 
 class CameraContainer extends Component {
+
+  componentDidMount() => this.props.getCameraParameter();
+  
   render = () => {
     const { Layout, autofocus } = this.props;
 

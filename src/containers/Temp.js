@@ -84,7 +84,7 @@ const mapStateToProps = function(state) {
 
 const mapDispatchToProps = {
     getTemp
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Temp);
 

@@ -12,7 +12,6 @@ export function takePictureReady() {
 
 export function getCameraParameter() {
   console.log('in getCameraParameter: start auto focus');
-
   return dispatch => new Promise((resolve, reject) => {
     return resolve(dispatch({
         type: 'AUTO_FOCUS',
