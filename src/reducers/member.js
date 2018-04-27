@@ -6,6 +6,7 @@ export default function userReducer(state = initialState, action) {
   switch (action.type) {
     case 'USER_LOGIN': {
       if (action.data) {
+        // polyfill
         return {
           ...state,
           loading: false,
