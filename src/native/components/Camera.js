@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Icon } from 'native-base';
 import { Camera, Permissions } from 'expo';
 
@@ -9,6 +9,16 @@ export default class CameraComponent extends React.Component {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      files: []
+    }
+
+    this.onTakePicture = this.onTakePicture.bind(this);
+  }
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -21,6 +31,26 @@ export default class CameraComponent extends React.Component {
 
   onCameraReady() {
     console.log('camera ready.')
+  }
+
+  async onTakePicture() {
+    if (!this.camera) {
+      return console.log('no camera');
+    }
+
+    // FIXME: use Redux
+    let photo = await this.camera.takePictureAsync();
+
+    /*
+    photo {
+      "height": 736,
+      "uri": "file:///var/mobile/Containers/Data/Application/A877E01C-FDF6-4BB2-9DCD-3BB9122C0188/Library/Caches/ExponentExperienceData/%2540jollen%252Freact-native-starter-kit/Camera/A20AC121-A8D8-4042-AB56-FC418D6A0B40.jpg",
+      "width": 1080,
+    }
+    */
+
+    this.state.files.push(photo.uri);
+    this.setState( this.state );
   }
 
   render() {
@@ -39,13 +69,14 @@ export default class CameraComponent extends React.Component {
             takePictureReady={this.props.takePictureReady}
             onCameraReady={this.onCameraReady}
             style={this.props.style} 
-            type={this.state.type}>
+            type={this.state.type}
+            ref={ref => {this.camera = ref;}}>
             <View
-              style={{
-                flex: 1,
-                backgroundColor: 'transparent',
-                flexDirection: 'row',
-              }}>
+                style={{
+                  flex: 1,
+                  backgroundColor: 'transparent',
+                  flexDirection: 'row',
+                }}>
               <TouchableOpacity
                 style={{
                   flex: 0.1,
@@ -75,9 +106,34 @@ export default class CameraComponent extends React.Component {
                   style={{ fontSize: 24, marginBottom: 10, color: 'white' }}
                   type="FontAwesome" name="circle-o-notch"
                   />
-              </TouchableOpacity>              
-            </View>
+              </TouchableOpacity>    
+              <TouchableOpacity
+                style={{
+                  flex: 0.1,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                }}
+                onPress={this.onTakePicture}>
+                <Icon 
+                  style={{ fontSize: 24, marginBottom: 10, color: 'white' }}
+                  type="FontAwesome" name="circle"
+                  />
+              </TouchableOpacity>               
+            </View>            
           </Camera>
+          <View style={styles.viewGallery}> 
+            {this.state.files.map(file => (
+              <Image
+                style={{
+                  flex: 0.1, 
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                  width: 80, 
+                  height: 80
+                }}
+                source={{ uri: file }} />
+            ))}
+          </View>
         </View>
       );
     }
@@ -96,9 +152,15 @@ CameraComponent.defaultProps = {
   style: { flex: 1 },
 }
 
-
-
-
+//Styles
+const styles = StyleSheet.create({
+  viewGallery: {
+    flex: 1,
+    flexDirection: 'row',   
+    height: 80,
+    backgroundColor:'#ffffff'
+  }
+})
 
 
 

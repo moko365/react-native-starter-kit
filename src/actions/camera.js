@@ -1,5 +1,3 @@
-import { Camera } from 'expo';
-
 export function takePictureReady() {
   console.log('in takePictureReady: auto focus started');	
   return dispatch => new Promise((resolve, reject) => {

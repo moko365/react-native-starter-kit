@@ -7,8 +7,6 @@ import { takePictureReady, getCameraParameter } from '../actions/camera';
 
 class CameraContainer extends Component {
 
-  componentDidMount = () => this.props.getCameraParameter();
-
   render = () => {
     const { Layout, autofocus } = this.props;
 
@@ -26,4 +24,4 @@ const mapDispatchToProps = {
   takePictureReady,
 };
 
-export default connect(mapStateToProps)(CameraContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CameraContainer);
