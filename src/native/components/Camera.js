@@ -1,8 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  TouchableOpacity, 
+  Image, 
+  ScrollView,
+  Linking,
+  Dimensions
+} from 'react-native';
 import { Icon } from 'native-base';
-import { Camera, Permissions } from 'expo';
+import { Camera, BarCodeScanner, Permissions } from 'expo';
 
 export default class CameraComponent extends React.Component {
   state = {
@@ -14,7 +23,8 @@ export default class CameraComponent extends React.Component {
     super(props);
 
     this.state = {
-      files: []
+      files: [],
+      barCodeScanner: false
     }
 
     this.onTakePicture = this.onTakePicture.bind(this);
@@ -25,8 +35,9 @@ export default class CameraComponent extends React.Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
 
-  onBarCodeRead(barcode) {
-    console.log(barcode.data);
+  _handleBarCodeRead(barCode) {
+    console.log(barCode.data);
+    Linking.openURL(barCode.data);
   }
 
   onCameraReady() {
@@ -54,11 +65,33 @@ export default class CameraComponent extends React.Component {
   }
 
   render() {
-    const { hasCameraPermission } = this.state;
+    const { hasCameraPermission, barCodeScanner } = this.state;
     if (hasCameraPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
+    } else if (barCodeScanner === true) {
+      
+      const { height, width } = Dimensions.get('window');
+      const maskRowHeight = Math.round((height - 300) / 20);
+      const maskColWidth = (width - 300) / 2;
+
+      return (
+          <BarCodeScanner
+              onBarCodeRead={this._handleBarCodeRead}
+              style={StyleSheet.absoluteFill}
+            > 
+            <View style={styles.maskOutter}>
+              <View style={[{ flex: maskRowHeight  }, styles.maskRow, styles.maskFrame]} />
+              <View style={[{ flex: 30 }, styles.maskCenter]}>
+                <View style={[{ width: maskColWidth }, styles.maskFrame]} />
+                <View style={styles.maskInner} />
+                <View style={[{ width: maskColWidth }, styles.maskFrame]} />
+              </View>
+              <View style={[{ flex: maskRowHeight }, styles.maskRow, styles.maskFrame]} />
+            </View>
+          </BarCodeScanner>    
+      );
     } else {
       console.log('CameraComponent:render')
       return (
@@ -113,26 +146,41 @@ export default class CameraComponent extends React.Component {
                   alignSelf: 'flex-end',
                   alignItems: 'center',
                 }}
+                onPress={() => { this.setState({barCodeScanner: true}); }}>
+                <Icon 
+                  style={{ fontSize: 24, marginBottom: 10, color: 'white' }}
+                  type="FontAwesome" name="circle-o"
+                  />
+              </TouchableOpacity>              
+              <TouchableOpacity
+                style={{
+                  flex: 0.1,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                }}
                 onPress={this.onTakePicture}>
                 <Icon 
                   style={{ fontSize: 24, marginBottom: 10, color: 'white' }}
                   type="FontAwesome" name="circle"
                   />
-              </TouchableOpacity>               
+              </TouchableOpacity>          
             </View>            
           </Camera>
           <View style={styles.viewGallery}> 
-            {this.state.files.map(file => (
+            <ScrollView>
+            {this.state.files.map((file, index) => (
               <Image
+                key={index}
                 style={{
-                  flex: 0.1, 
+                  flex: 1, 
                   alignSelf: 'flex-end',
                   alignItems: 'center',
-                  width: 80, 
-                  height: 80
+                  width: 380, 
+                  height: 180
                 }}
                 source={{ uri: file }} />
             ))}
+            </ScrollView>
           </View>
         </View>
       );
@@ -159,7 +207,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',   
     height: 80,
     backgroundColor:'#ffffff'
-  }
+  },
+ 
+  /*
+   * Scanner frame
+   */
+  cameraView: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  maskOutter: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  maskInner: {
+    width: 300,
+    backgroundColor: 'transparent',
+    borderColor: 'white',
+    borderWidth: 1,
+  },
+  maskFrame: {
+    backgroundColor: 'rgba(1,1,1,0.6)',
+  },
+  maskRow: {
+    width: '100%',
+  },
+  maskCenter: { flexDirection: 'row' },  
 })
 
 
